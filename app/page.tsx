@@ -1,10 +1,19 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Interaction, AnalysisResult } from '@/lib/types';
+import { Interaction, AnalysisResult, getPageNumber } from '@/lib/types';
 import DropZone from '@/components/DropZone';
 import DocumentViewer from '@/components/DocumentViewer';
 import InteractionPanel from '@/components/InteractionPanel';
+
+/** Generate a short document ID from filename */
+function generateDocId(fileName: string): string {
+  const base = fileName.replace(/\.[^.]+$/, ''); // strip extension
+  // Use first chunk that looks like an ID (e.g. AS1091) or first 12 chars
+  const idMatch = base.match(/[A-Z]{1,4}\d{3,6}/);
+  if (idMatch) return idMatch[0];
+  return base.substring(0, 16).replace(/[^a-zA-Z0-9]/g, '_');
+}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +30,7 @@ export default function Home() {
     try {
       // Step 1: Parse the document
       let text: string;
+      let pageBreaks: number[] = [0];
       const ext = file.name.split('.').pop()?.toLowerCase();
 
       if (ext === 'txt') {
@@ -43,6 +53,7 @@ export default function Home() {
 
         const parseData = await parseRes.json();
         text = parseData.text;
+        pageBreaks = parseData.pageBreaks || [0];
       }
 
       if (!text.trim()) {
@@ -63,10 +74,22 @@ export default function Home() {
 
       const analyzeData = await analyzeRes.json();
 
+      // Add page numbers based on character offset
+      const interactions: Interaction[] = analyzeData.interactions.map(
+        (item: Interaction) => ({
+          ...item,
+          pageNumber: getPageNumber(item.characterOffset, pageBreaks),
+        })
+      );
+
+      const documentId = generateDocId(file.name);
+
       setResult({
-        interactions: analyzeData.interactions,
+        interactions,
         documentText: text,
         fileName: file.name,
+        documentId,
+        pageBreaks,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -100,9 +123,14 @@ export default function Home() {
           </div>
           {result && (
             <div className="flex items-center gap-4">
-              <span className="font-mono text-[0.65rem] tracking-wider text-pebble uppercase">
-                {result.fileName}
-              </span>
+              <div className="text-right">
+                <span className="font-mono text-[0.6rem] tracking-wider text-pebble uppercase block">
+                  {result.fileName}
+                </span>
+                <span className="font-mono text-[0.55rem] tracking-wider text-pebble/60 uppercase">
+                  ID: {result.documentId}
+                </span>
+              </div>
               <button
                 onClick={handleReset}
                 className="px-4 py-1.5 rounded text-[0.65rem] font-mono tracking-wider uppercase bg-steel-blue text-white hover:bg-horizon-blue transition-colors"
@@ -127,13 +155,13 @@ export default function Home() {
             <DropZone onFileAccepted={handleFileAccepted} isLoading={isLoading} />
           </div>
         ) : (
-          <div className="flex-1 flex overflow-hidden">
-            {/* Left: Document viewer */}
-            <div className="w-1/2 border-r border-hairline bg-warm-white overflow-hidden flex flex-col">
-              <div className="px-6 py-3 border-b border-hairline bg-parchment flex items-center justify-between">
+          <div className="flex-1 flex gap-6 overflow-hidden" style={{ padding: '24px 24px 24px 28px' }}>
+            {/* Left: Document viewer card */}
+            <div className="w-[55%] flex flex-col rounded-lg border border-hairline bg-warm-white shadow-sm overflow-hidden">
+              <div className="px-5 py-3 border-b border-hairline bg-parchment flex items-center justify-between flex-shrink-0">
                 <h2 className="font-serif text-lg font-light text-ink">Document</h2>
                 <span className="font-mono text-[0.6rem] tracking-wider text-pebble uppercase">
-                  {result.documentText.length.toLocaleString()} characters
+                  {result.documentText.length.toLocaleString()} characters &middot; {result.pageBreaks.length} pages
                 </span>
               </div>
               <div className="flex-1 overflow-hidden">
@@ -145,12 +173,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right: Interactions panel */}
-            <div className="w-1/2 bg-parchment overflow-hidden flex flex-col">
+            {/* Right: Interactions panel card */}
+            <div className="flex-1 flex flex-col rounded-lg border border-hairline bg-warm-white shadow-sm overflow-hidden">
               <InteractionPanel
                 interactions={result.interactions}
                 activeInteractionId={activeInteractionId}
                 onInteractionClick={handleInteractionClick}
+                documentId={result.documentId}
               />
             </div>
           </div>

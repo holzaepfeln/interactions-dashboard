@@ -107,9 +107,9 @@ export default function DocumentViewer({ text, interactions, activeInteractionId
   }, [text, interactions]);
 
   return (
-    <div ref={containerRef} className="h-full overflow-y-auto p-6">
-      <div className="max-w-none prose prose-sm">
-        <div className="whitespace-pre-wrap text-sm leading-relaxed font-body text-ink">
+    <div ref={containerRef} className="h-full overflow-y-auto" style={{ padding: '28px 32px 28px 40px' }}>
+      <div className="w-full">
+        <div className="whitespace-pre-wrap text-sm leading-[1.8] font-body text-ink break-words" style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
           {segments.map((segment, i) => {
             if (!segment.interactionId) {
               return <span key={i}>{segment.text}</span>;

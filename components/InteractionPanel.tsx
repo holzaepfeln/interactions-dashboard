@@ -8,6 +8,7 @@ interface Props {
   interactions: Interaction[];
   activeInteractionId: string | null;
   onInteractionClick: (id: string) => void;
+  documentId: string;
 }
 
 type FilterPair = 'all' | `${EntityType}-${EntityType}`;
@@ -46,7 +47,7 @@ function matchesPair(interaction: Interaction, filter: FilterPair): boolean {
   );
 }
 
-export default function InteractionPanel({ interactions, activeInteractionId, onInteractionClick }: Props) {
+export default function InteractionPanel({ interactions, activeInteractionId, onInteractionClick, documentId }: Props) {
   const [filter, setFilter] = useState<FilterPair>('all');
 
   const filtered = interactions.filter((i) => matchesPair(i, filter));
@@ -61,7 +62,7 @@ export default function InteractionPanel({ interactions, activeInteractionId, on
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-hairline bg-warm-white">
+      <div className="p-4 border-b border-hairline bg-parchment flex-shrink-0">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-serif text-lg font-light text-ink">
             Extracted Interactions
@@ -110,7 +111,7 @@ export default function InteractionPanel({ interactions, activeInteractionId, on
       </div>
 
       {/* Interaction list */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto p-4 space-y-5">
         {filtered.length === 0 ? (
           <div className="text-center py-12 text-pebble">
             <p className="font-serif text-lg">No interactions found</p>
@@ -123,6 +124,7 @@ export default function InteractionPanel({ interactions, activeInteractionId, on
               interaction={interaction}
               isActive={interaction.id === activeInteractionId}
               onClick={() => onInteractionClick(interaction.id)}
+              documentId={documentId}
             />
           ))
         )}
