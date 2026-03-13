@@ -62,8 +62,8 @@ export default function InteractionPanel({ interactions, activeInteractionId, on
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-hairline bg-parchment flex-shrink-0">
-        <div className="flex items-center justify-between mb-3">
+      <div style={{ padding: '18px 20px 16px', borderBottom: '1px solid #D9D2C7', backgroundColor: '#F5F0E8', flexShrink: 0 }}>
+        <div className="flex items-center justify-between" style={{ marginBottom: '12px' }}>
           <h2 className="font-serif text-lg font-light text-ink">
             Extracted Interactions
           </h2>
@@ -95,7 +95,7 @@ export default function InteractionPanel({ interactions, activeInteractionId, on
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap gap-3 mt-3 pt-3 border-t border-hairline">
+        <div className="flex flex-wrap gap-3" style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #D9D2C7' }}>
           {(Object.keys(ENTITY_LABELS) as EntityType[]).map((key) => (
             <div key={key} className="flex items-center gap-1.5">
               <div
@@ -110,8 +110,8 @@ export default function InteractionPanel({ interactions, activeInteractionId, on
         </div>
       </div>
 
-      {/* Interaction list */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-5">
+      {/* Interaction list - generous padding and spacing */}
+      <div className="flex-1 overflow-y-auto" style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {filtered.length === 0 ? (
           <div className="text-center py-12 text-pebble">
             <p className="font-serif text-lg">No interactions found</p>
