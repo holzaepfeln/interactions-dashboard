@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-parchment: #F5F0E8;
+  --color-warm-white: #FAF7F2;
+  --color-midnight: #1B2A3B;
+  --color-deep-ocean: #0F1E2E;
+  --color-terracotta: #C4654A;
+  --color-sienna: #A04A32;
+  --color-gold: #B8924A;
+  --color-steel-blue: #2E5F8A;
+  --color-horizon-blue: #5B8DB8;
+  --color-sage: #5E7A63;
+  --color-ink: #2B2318;
+  --color-ink-soft: #5A4E3F;
+  --color-pebble: #9E9285;
+  --color-hairline: #D9D2C7;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-body: Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--color-ink);
+  background: var(--color-parchment);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-parchment);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-pebble);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(43, 35, 24, 0.1);
+}
+
+.highlight-active {
+  background-color: rgba(184, 146, 74, 0.3) !important;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.highlight-flash {
+  animation: flash 2s ease-out;
+}
+
+@keyframes flash {
+  0% { background-color: rgba(184, 146, 74, 0.5); }
+  100% { background-color: rgba(184, 146, 74, 0.15); }
+}
+
+mark[data-entity="private-security"] {
+  background-color: rgba(196, 101, 74, 0.15);
+  border-bottom: 2px solid #C4654A;
+}
+mark[data-entity="law-enforcement"] {
+  background-color: rgba(46, 95, 138, 0.15);
+  border-bottom: 2px solid #2E5F8A;
+}
+mark[data-entity="activists"] {
+  background-color: rgba(94, 122, 99, 0.15);
+  border-bottom: 2px solid #5E7A63;
+}
