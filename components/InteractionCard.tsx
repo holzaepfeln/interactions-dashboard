@@ -90,42 +90,30 @@ export default function InteractionCard({ interaction, isActive, onClick, docume
           {context}
         </p>
 
-        {/* Quote */}
+        {/* Quote with inline citation */}
         <blockquote style={{
           fontSize: '0.875rem',
           lineHeight: 1.7,
           color: '#2B2318',
           borderLeft: '2px solid #D9D2C7',
           paddingLeft: '12px',
-          marginBottom: '12px',
+          marginBottom: '14px',
           fontFamily: "Georgia, 'Times New Roman', serif",
           fontStyle: 'italic',
         }}>
-          &ldquo;{quote}&rdquo;
-        </blockquote>
-
-        {/* Citation - ALWAYS visible */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          marginBottom: '14px',
-          paddingLeft: '12px',
-        }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9E9285" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-          </svg>
+          &ldquo;{quote}&rdquo;{' '}
           <span style={{
-            fontSize: '0.8rem',
+            fontStyle: 'normal',
+            fontSize: '0.75rem',
             fontFamily: "'IBM Plex Mono', monospace",
-            color: '#5A4E3F',
+            color: '#9E9285',
             letterSpacing: '0.03em',
             fontWeight: 500,
+            whiteSpace: 'nowrap',
           }}>
-            {citation}
+            ({citation})
           </span>
-        </div>
+        </blockquote>
 
         {/* Copy button */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #D9D2C7', paddingTop: '10px' }}>
